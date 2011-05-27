@@ -12,6 +12,7 @@
 var express = require('express')
   , resource = require('express-resource')
   , readdir = require('fs').readdirSync
+  , join = require('path').join
   , extname = require('path').extname
 
 /**
@@ -29,7 +30,7 @@ express.HTTPServer.prototype.controllers =
 express.HTTPSServer.prototype.controllers = function(app){
   var loaded = []
     , self = app || this
-    , controllerPath = self.set('controllers path') || __dirname + '/../../controllers/';
+    , controllerPath = self.set('controllers path') || __dirname + '/../../controllers';
 
   readdir(controllerPath).forEach(function(file){
     if (file.match(/^.*.js$/ig)){
@@ -37,7 +38,7 @@ express.HTTPSServer.prototype.controllers = function(app){
       loaded.push(controller);
       
       if (typeof self.resource !== 'undefined'){
-        loaded[controller] = self.resource(controller, require(controllerPath + controller));
+        loaded[controller] = self.resource(controller, require(join(controllerPath, controller)));
       }
     }
   });
