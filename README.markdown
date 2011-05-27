@@ -1,6 +1,6 @@
 # Express Controllers
 
-  express-controllers adds controller style routing of model-view-controller to express using [express-resource](http://github.com/visionmedia/express-resource).
+  express-controllers adds controller style routing from the model-view-controller paradigm to express using [express-resource](http://github.com/visionmedia/express-resource).
 
 ## Installation
 
@@ -10,7 +10,7 @@ npm:
 
 ## Usage
 
- To get started simply `require('express-controllers')`, and this module will monkey-patch Express, enabling the controller style routing by providing the `app.controllers()` method. A "controller" is simply an object, which defines one of more of the supported "actions" listed below:
+ To get started simply `require('express-controllers')`, and this module will monkey-patch Express, enabling the controller style routing by providing the `app.controllers()` method. A "controller" is simply a module, which defines one of more of the supported "actions" listed below:
 
     exports.index = function(req, res){
       res.send('forum index');
