@@ -1,0 +1,20 @@
+{   "name": "express-controllers"
+  , "description": "MVC routing for express"
+  , "version": "0.2.0"
+  , "author": "Nicholas Penree <drudge@conceited.net>"
+  , "repository" : {
+    "type": "git"
+  , "url": "git://github.com/drudge/express-controllers.git"
+  }
+  , "contributors": []
+  , "dependencies": { 
+      "express-resource": ">=0.2.1"
+  }
+  , "devDependencies": {
+      "connect": "1.4.x"
+    , "express": "2.3.x"
+  }
+  , "keywords": ["express", "rest", "resource", "mvc", "controller"]
+  , "main": "index"
+  , "engines": { "node": ">= 0.2.0" }
+}
