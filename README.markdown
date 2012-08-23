@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/drudge/express-controllers.png)](http://travis-ci.org/drudge/express-controllers)
 # Express Controllers
 
   express-controllers adds controller style routing from the model-view-controller paradigm to express using [express-resource](http://github.com/visionmedia/express-resource).
