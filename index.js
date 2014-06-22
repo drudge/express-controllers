@@ -26,7 +26,6 @@ var express = require('express')
  */
   
 module.exports =
-express.application.controllers =
 express.application.controllers = function(app){
   var loaded = []
     , self = app || this
