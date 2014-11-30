@@ -26,8 +26,7 @@ var express = require('express')
  */
   
 module.exports =
-express.HTTPServer.prototype.controllers =
-express.HTTPSServer.prototype.controllers = function(app){
+express.application.controllers = function(app){
   var loaded = []
     , self = app || this
     , controllerPath = self.set('controllers path') || __dirname + '/../../controllers';
