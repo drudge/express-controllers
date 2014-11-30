@@ -11,7 +11,7 @@
       "express-resource": "~1.0.0"
   }
   , "devDependencies": {
-    , "express": "4.x.x"
+     "express": "4.x.x"
   }
   , "keywords": ["express", "rest", "resource", "mvc", "controller"]
   , "main": "index"
