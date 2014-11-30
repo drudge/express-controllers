@@ -11,53 +11,61 @@ npm:
 
 ## Usage
 
- To get started simply `require('express-controllers')`, and this module will monkey-patch Express, enabling the controller style routing by providing the `app.controllers()` method. A "controller" is simply a module, which defines one of more of the supported "actions" listed below:
+```js
+var express = require('express')
+var controllers = require('express-controllers')
 
-    exports.index = function(req, res) {
-      res.send('forum index');
-    };
+var app = module.exports = express().controllers();
 
-    exports.new = function(req, res) {
-      res.send('new forum');
-    };
+if (!require.parent) {
+  var server = app.listen(3000, function() {
+    var host = server.address().address;
+    var port = server.address().port;
+    console.log('Express 4 server listening at http://%s:%s', host, port);
+  });
+}
+```
 
-    exports.create = function(req, res) {
-      res.send('create forum');
-    };
-
-    exports.show = function(req, res) {
-      res.send('show forum ' + req.params.forum);
-    };
-
-    exports.edit = function(req, res) {
-      res.send('edit forum ' + req.params.forum);
-    };
-
-    exports.update = function(req, res) {
-      res.send('update forum ' + req.params.forum);
-    };
-
-    exports.destroy = function(req, res) {
-      res.send('destroy forum ' + req.params.forum);
-    };
-
-By default, the `app.controllers()` method will load any controllers in the directory named `controllers` of your application (wherever node_modules is). If you prefer to store your controllers in a different location, simply specify your desired path in the app setting via `app.set('controllers path', '/path/to/controllers/')`.
-
-    var express = require('express')
-    var controllers = require('express-controllers')
-
-    var app = module.exports = express().controllers();
-    
-    if (!require.parent) {
-      var server = app.listen(3000, function() {
-        var host = server.address().address;
-        var port = server.address().port;
-        console.log('Express 4 server listening at http://%s:%s', host, port);
-      });
-    }
+By default, the `app.controllers()` method will load any controllers in the directory named `controllers` of your application (wherever server.js/app.js is). If you prefer to store your controllers in a different location, simply specify your desired path in the app setting via `app.set('controllers path', '/path/to/controllers/')`.
 
 
-## Default Action Mapping
+ To get started simply `require('express-controllers')`, and this module will monkey-patch Express, enabling the controller style routing by providing the `app.controllers()` method. 
+ 
+### Controllers
+  
+  A "controller" is simply a module which defines one of more of the supported "actions", listed below:
+
+```js
+exports.index = function(req, res) {
+  res.send('forum index');
+};
+
+exports.new = function(req, res) {
+  res.send('new forum');
+};
+
+exports.create = function(req, res) {
+  res.send('create forum');
+};
+
+exports.show = function(req, res) {
+  res.send('show forum ' + req.params.forum);
+};
+
+exports.edit = function(req, res) {
+  res.send('edit forum ' + req.params.forum);
+};
+
+exports.update = function(req, res) {
+  res.send('update forum ' + req.params.forum);
+};
+
+exports.destroy = function(req, res) {
+  res.send('destroy forum ' + req.params.forum);
+};
+```
+
+### Default Action Mapping
 
 Actions are then mapped as follows (by default), providing `req.params.forum` which contains the substring where ":forum" is shown below:
 
@@ -69,47 +77,52 @@ Actions are then mapped as follows (by default), providing `req.params.forum` wh
     PUT     /forums/:forum       ->  update
     DELETE  /forums/:forum       ->  destroy
 
-## Content-Negotiation
+### Content-Negotiation
 
   Currently express-controllers (by way of express-resource) supports basic content-negotiation support utilizing extnames or "formats". This can currently be done two ways, first we may define actions as we normally would, and utilize the `req.format` property, and respond accordingly. The following would respond to `GET /pets.xml`, and `GET /pets.json`.
   
-      var pets = ['tobi', 'jane', 'loki'];
+```js
+var pets = ['tobi', 'jane', 'loki'];
 
-      exports.index = function(req, res) {
-        switch (req.format) {
-          case 'json':
-            res.send(pets);
-            break;
-          case 'xml':
-            res.send('<pets>' + pets.map(function(pet) {
-              return '<pet>' + pet + '</pet>';
-            }).join('') + '</pets>');
-            break;
-          default:
-            res.send(406);
-        }
-      };
+exports.index = function(req, res) {
+  switch (req.format) {
+    case 'json':
+      res.send(pets);
+      break;
+    case 'xml':
+      res.send('<pets>' + pets.map(function(pet) {
+        return '<pet>' + pet + '</pet>';
+      }).join('') + '</pets>');
+      break;
+    default:
+      res.send(406);
+  }
+};
+```
 
  The following is equivalent, however we separate the logic into several callbacks, each representing a format. 
  
-     exports.index = {
-       json: function(req, res) {
-         res.send(pets);
-       },
+```js
+exports.index = {
+  json: function(req, res) {
+    res.send(pets);
+  },
 
-       xml: function(req, res){
-         res.send('<pets>' + pets.map(function(pet) {
-           return '<pet>' + pet + '</pet>';
-         }).join('') + '</pets>');
-       }
-     };
+  xml: function(req, res){
+    res.send('<pets>' + pets.map(function(pet) {
+     return '<pet>' + pet + '</pet>';
+    }).join('') + '</pets>');
+  }
+};
+```
 
  We may also provide a `default` format, invoked when either no extension is given, or one that does not match another method is given:
  
- 
-     exports.default = function(req, res) {
-       res.send('Unsupported format "' + req.format + '"', 406);
-     };
+ ```js
+ exports.default = function(req, res) {
+   res.send('Unsupported format "' + req.format + '"', 406);
+ };
+```
 
 ## License
 
