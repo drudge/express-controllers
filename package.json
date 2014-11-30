@@ -1,13 +1,13 @@
 {   "name": "express-controllers"
-  , "description": "MVC routing for express"
-  , "version": "0.3.0"
+  , "description": "Dead simple MVC routing for express"
+  , "version": "1.0.0"
   , "author": "Nicholas Penree <nick@penree.com>"
   , "repository" : {
     "type": "git"
   , "url": "git://github.com/drudge/express-controllers.git"
   }
   , "contributors": []
-  , "dependencies": { 
+  , "dependencies": {
       "express-resource": "~1.0.0"
   }
   , "devDependencies": {

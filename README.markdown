@@ -13,43 +13,49 @@ npm:
 
  To get started simply `require('express-controllers')`, and this module will monkey-patch Express, enabling the controller style routing by providing the `app.controllers()` method. A "controller" is simply a module, which defines one of more of the supported "actions" listed below:
 
-    exports.index = function(req, res){
+    exports.index = function(req, res) {
       res.send('forum index');
     };
 
-    exports.new = function(req, res){
+    exports.new = function(req, res) {
       res.send('new forum');
     };
 
-    exports.create = function(req, res){
+    exports.create = function(req, res) {
       res.send('create forum');
     };
 
-    exports.show = function(req, res){
+    exports.show = function(req, res) {
       res.send('show forum ' + req.params.forum);
     };
 
-    exports.edit = function(req, res){
+    exports.edit = function(req, res) {
       res.send('edit forum ' + req.params.forum);
     };
 
-    exports.update = function(req, res){
+    exports.update = function(req, res) {
       res.send('update forum ' + req.params.forum);
     };
 
-    exports.destroy = function(req, res){
+    exports.destroy = function(req, res) {
       res.send('destroy forum ' + req.params.forum);
     };
 
 By default, the `app.controllers()` method will load any controllers in the directory named `controllers` of your application (wherever node_modules is). If you prefer to store your controllers in a different location, simply specify your desired path in the app setting via `app.set('controllers path', '/path/to/controllers/')`.
 
     var express = require('express')
-      , controllers = require('express-controllers')
-      , app = express.createServer();
+    var controllers = require('express-controllers')
 
-    app.set('controllers path', __dirname + '/controllers/');
-    app.controllers();
-    app.listen(3000);
+    var app = module.exports = express().controllers();
+    
+    if (!require.parent) {
+      var server = app.listen(3000, function() {
+        var host = server.address().address;
+        var port = server.address().port;
+        console.log('Express 4 server listening at http://%s:%s', host, port);
+      });
+    }
+
 
 ## Default Action Mapping
 
@@ -69,13 +75,13 @@ Actions are then mapped as follows (by default), providing `req.params.forum` wh
   
       var pets = ['tobi', 'jane', 'loki'];
 
-      exports.index = function(req, res){
+      exports.index = function(req, res) {
         switch (req.format) {
           case 'json':
             res.send(pets);
             break;
           case 'xml':
-            res.send('<pets>' + pets.map(function(pet){
+            res.send('<pets>' + pets.map(function(pet) {
               return '<pet>' + pet + '</pet>';
             }).join('') + '</pets>');
             break;
@@ -87,12 +93,12 @@ Actions are then mapped as follows (by default), providing `req.params.forum` wh
  The following is equivalent, however we separate the logic into several callbacks, each representing a format. 
  
      exports.index = {
-       json: function(req, res){
+       json: function(req, res) {
          res.send(pets);
        },
 
        xml: function(req, res){
-         res.send('<pets>' + pets.map(function(pet){
+         res.send('<pets>' + pets.map(function(pet) {
            return '<pet>' + pet + '</pet>';
          }).join('') + '</pets>');
        }
@@ -101,7 +107,7 @@ Actions are then mapped as follows (by default), providing `req.params.forum` wh
  We may also provide a `default` format, invoked when either no extension is given, or one that does not match another method is given:
  
  
-     exports.default = function(req, res){
+     exports.default = function(req, res) {
        res.send('Unsupported format "' + req.format + '"', 406);
      };
 
@@ -109,7 +115,7 @@ Actions are then mapped as follows (by default), providing `req.params.forum` wh
 
     The MIT License
 
-    Copyright (c) 2011 Nicholas Penree <drudge@conceited.net>
+    Copyright (c) 2011-2014 Nicholas Penree <nick@penree.com>
 
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the
